@@ -12,7 +12,8 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
-
+#include "lyra.hpp"
+#include <memory>
 
 /*
 argv[1]: Number of bytes per packet (required)
@@ -22,36 +23,61 @@ argv[3]: Comport (required)
 argv[4]: Filename where bytes are written (without file ending, required)
 */
 
-
 int main(const int argc, const char* const* const argv) {
 
+    int bytes = 1;
+    int packets = 10;
+    int delay = 0;
+    std::string filename{"test.txt"};
+    std::string comport{"ttyUSB0"};
+    bool help = false;
+
+    auto cli = lyra::cli()
+        | lyra::opt( bytes, "bytes" )
+        ["-b"]["--bytes"]
+        ("How many bytes per packet?")
+        | lyra::opt( packets, "packets" )
+        ["-p"]["--packets"]
+        ("How many packets should be sent?")
+        | lyra::opt( delay, "delay" )
+        ["-d"]["--delay"]
+        ("How much delay between packets?")
+        | lyra::opt( filename, "filename" )
+        ["-f"]["--filename"]
+        ("Which filename?")
+        | lyra::opt( comport, "comport" )
+        ["-c"]["--comport"]
+        ("Which comport?")
+        | lyra::help(help)
+        ["-h"]["--help"]
+        ("Help message");
+    auto result = cli.parse( { argc, argv } );
+
     
-    if (argc < 5){
-        std::cout << "5 Parameters bytes, packets, delay, comport, filename are required" << std::endl;
-        return 0;
+    if (help){
+        std::cout <<  "-b Number of bytes per packet, default 1" << std::endl;
+        std::cout <<  "-p Number of packets, default 10"  << std::endl;
+        std::cout <<  "-d Delay in Milliseconds, default 0" << std::endl;               
+        std::cout <<  "-f Filename, default test.txt" << std::endl;
+        std::cout <<  "-c Comport, default ttyUSB0" << std::endl;
     }
+   
 
-
-    int bytes = atoi(argv[1]);
-    int packets = atoi(argv[2]);
-    int del = atoi(argv[3]);
-
-    std::string comStart{"/dev/"};
-    std::string com{argv[4]};
-    std::string completeCom{comStart+com};
-    std::string filename{argv[5]};
-    std::ofstream file{filename + ".txt"};
+    std::ofstream file{filename};
+    std::string com = "/dev/" + comport;
 
 
     int fd = -1;
 
-    if ((fd = open(completeCom.c_str(),O_RDWR | O_NOCTTY)) < 0) {
+    if ((fd = open(com.c_str(),O_RDWR | O_NOCTTY)) < 0) {
         std::cout << "open failure" << std::endl;
         exit(EXIT_FAILURE);
     }
     else{
         
     }
+
+
 
     
 
@@ -81,29 +107,34 @@ int main(const int argc, const char* const* const argv) {
          perror("tcsetattr");
      }
 
+
+
+    //[SendData
     
+    std::unique_ptr<char[]> toWrite = std::make_unique<char[]>(bytes);
+    std::unique_ptr<char[]> written = std::make_unique<char[]>(bytes+1);
 
-    char toWrite[bytes];
-    char written[bytes+1];
-
-
-    int bytes_written = 0;
     for (int i=0; i< packets; i++){
         for (int i=0; i<bytes; i++){
             char c = 97 + rand()%26;
-            toWrite[i] = c;
-            written[i] = c;
+            toWrite.get()[i] = c;
+            written.get()[i] = c;
         }
-        written[bytes] = '\0';
-        bytes_written = write(fd,toWrite,sizeof(toWrite));
-        file << written << std::endl;
+        written.get()[bytes] = '\0';
+        write(fd,toWrite.get(),bytes);
+        file << written.get() << std::endl;
 
-        if (del > 0){
-            std::this_thread::sleep_for(std::chrono::milliseconds(del));
+        if (delay > 0){
+            std::this_thread::sleep_for(std::chrono::milliseconds(delay));
         }
     }
 
+    //]
+
     std::cout << "Writing completed" << std::endl;
+
+    
 
 
 }
+

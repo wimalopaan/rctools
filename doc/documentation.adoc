@@ -1,0 +1,106 @@
+
+= Holybro Telemetry V3 Test
+Johannes Hanuja <joha1003@stud.hs-kl.de>
+:lang: de
+:toc: left
+:toc-title: Content
+:toclevels: 5
+:numbered:
+:sectnumlevels: 5
+:src_numbered: 
+:icons: font
+:figure-caption: Figure
+:keywords: asciidoctor
+:description: Holybro Telemetry V3 Test
+:title: Holybro Telemetry V3 Test
+:sectanchors:
+:sectlinks:
+:experimental:
+:copyright: Wilhelm Meier
+:duration: 90
+:coderay-css: style
+:source-highlighter: pygments
+:pygments-css: class
+:status:
+:menu:
+:navigation:
+:split:
+:goto:
+:blank:
+:deckjs_theme: swiss
+:showtitle:
+:docinfo1:
+:stem:
+:deckjs_transition: horizontal-slide
+//:stylesdir: ./css
+//:stylesheet: wm2.css
+//:scriptsdir: ./js
+:customcss: css/deckjs.css 
+:revealjs_theme: beige
+:revealjs_slidenumber: true
+// for attributes in link:[] macro like link:xxx[window="_blank"]
+:linkattrs:
+
+:srcbase: ../src
+:extractordir: .extractor
+
+
+== Versuchsbeschreibung
+
+Das Funkmodul Sik Telemetry V3 der Firma Holybro soll laut Datenblatt Entfernungen von über 300 Metern schaffen und das Senden von Paketen mit einer konstanten Datenrate garantieren. Es beinhaltet einen Buffer von 2048 kbyte, zudem ist die Sendegeschwindigkeit parametrierbar (Standart: 64kbit/s). In dieser Versuchsreihe soll die Baudrate gefunden werden mit der eine konstante Datenrate garantiert werden kann, ohne hierbei Paketverluste zu erleiden. Hierzu soll letzendlich herausgefunden werden, wann der interne Buffer des Funkmoduls überläuft. Desweiteren soll das Verhalten des Funkmoduls über größere Entfernungen überprüft werden. 
+
+== Versuchshardware
+
+Zur Versuchsdurchführung werden zwei der Funkmodems vewendet. Eines ist mit dem Computer über die serielle Schnittstelle verbunden. Beim zweiten Funkmodul wurden RX und TX Pin miteinander verbunden, sodass empfangene Pakete umgehend zurückgesendet werden. 
+
+== Testprogramme
+
+Das Testen des Funkmoduls geschieht mit Hilfe von 2 Programmen. Das Programm write verschickt eine Anzahl von Paketen mit einer Anzahl von Bytes. Zudem ist ein Delay zwischen den Paketen parametrierbar. Das Programm `write` hat die folgenden Kommandozeilenoptionen:  
+
+[horizontal]
+Option:: Beschreibung
+`-h`, `--help`:: Hilfe
+`-p`, `--packets`:: Anzahl Pakete
+`-b`, `--bytes`:: Anzahl Bytes
+`-d`, `--delay`:: Delay zwischen Paketen
+`-c`, `--comport`:: Comport
+`-f`, `--filename`:: Dateiname
+
+
+Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars.
+
+:srcdir: write
+
+include::{srcbase}/{srcdir}/{extractordir}/write.cc.SendData[]
+
+:srcdir: read
+
+Das Programm `read` hat keine Delayoption, ansonsten sind die Kommandozeilenoptionen analog zum Programm `write`. Die empfangenen Bytes werden ausgelesen und ebenfalls in eine Datei geschrieben. 
+
+include::{srcbase}/{srcdir}/{extractordir}/read.cc.ReadData[]
+
+
+== Versuche
+=== Versuch 1: Kontinuierliches Senden mit 9600 Baud 
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 9600_1000000_1_0.txt
+
+Resultat: Es gehen keine Bytes verloren.
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 9600_1000000_1_0_1.txt
+
+Resultat: Es gehen keine Bytes verloren
+
+
+
+
