@@ -70,18 +70,20 @@ Option:: Beschreibung
 Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars.
 
 :srcdir: write
-
 include::{srcbase}/{srcdir}/{extractordir}/write.cc.SendData[]
 
-:srcdir: read
 
 Das Programm `read` hat keine Delayoption, ansonsten sind die Kommandozeilenoptionen analog zum Programm `write`. Die empfangenen Bytes werden ausgelesen und ebenfalls in eine Datei geschrieben. 
 
+:srcdir: read
 include::{srcbase}/{srcdir}/{extractordir}/read.cc.ReadData[]
 
 
 == Versuche
 === Versuch 1: Kontinuierliches Senden mit 9600 Baud 
+
+Bei diesem Versuch wird 1MByte mit einer Baudrate von 9600 bit/s versendet. Die Anzahl Bytes pro Paket und die korrespondierende Anzahl von Paketen wird hierbei variiert. 
+
 
 [horizontal]
 Option:: Wert
@@ -101,6 +103,44 @@ Option:: Wert
 
 Resultat: Es gehen keine Bytes verloren
 
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 10000
+`-b`, `--bytes`:: 100
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 9600_10000_100_0.txt
+
+Resultat: Es gehen keine Bytes verloren
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 10000
+`-b`, `--bytes`:: 100
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 9600_10000_100_0_1.txt
+
+Resultat: Es gehen keine Bytes verloren
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000
+`-b`, `--bytes`:: 1000
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 9600_1000_1000_0.txt
+
+Resultat: Es gehen keine Bytes verloren
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000
+`-b`, `--bytes`:: 1000
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 9600_1000_1000_0_1.txt
+
+
+
+==== Versuch 1: Fazit 
+Eine Datenrate von 9600 bit/s kann durch das Modem garantiert werden. Dies überrascht nicht, da die Übertragungsgeschwindigkeit 64000 bit/s beträgt und zudem ein Buffer von 2048 byte vorliegt.
 
 
 

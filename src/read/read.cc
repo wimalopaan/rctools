@@ -71,10 +71,8 @@ int main(const int argc, const char* const* const argv) {
     while(c < packets){
         for (int i= 0; i<bytes; i++){
             read(fd,&(toRead.get()[i]),1);
-            std::cout << toRead.get()[i] << std::endl;
         }
         toRead.get()[bytes] = '\0';
-        std::cout << toRead.get() << std::endl;
         file << toRead.get() << std::endl;
         c++;
      }
