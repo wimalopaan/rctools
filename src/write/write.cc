@@ -28,6 +28,7 @@ int main(const int argc, const char* const* const argv) {
     int bytes = 1;
     int packets = 10;
     int delay = 0;
+    int baudrate = 9600;
     std::string filename{"test.txt"};
     std::string comport{"ttyUSB0"};
     bool help = false;
@@ -42,6 +43,9 @@ int main(const int argc, const char* const* const argv) {
         | lyra::opt( delay, "delay" )
         ["-d"]["--delay"]
         ("How much delay between packets?")
+        | lyra::opt( baudrate, "baudrate" )
+        ["-a"]["--baudrate"]
+        ("Which baudrate?")
         | lyra::opt( filename, "filename" )
         ["-f"]["--filename"]
         ("Which filename?")
@@ -60,6 +64,7 @@ int main(const int argc, const char* const* const argv) {
         std::cout <<  "-d Delay in Milliseconds, default 0" << std::endl;               
         std::cout <<  "-f Filename, default test.txt" << std::endl;
         std::cout <<  "-c Comport, default ttyUSB0" << std::endl;
+        std::cout <<  "-br Baudrate, default 9600" << std::endl;
     }
    
 
@@ -77,6 +82,77 @@ int main(const int argc, const char* const* const argv) {
         
     }
 
+    std::cout << baudrate << std::endl;
+
+
+    speed_t b = B9600;
+
+    switch (baudrate){
+        case (0):
+            b = B0;
+            break;
+        case (50):
+            b= B50;
+            break;
+        case (75):
+            b = B75;
+            break;
+        case (110):
+            b = B110;
+            break;
+        case (134):
+            b = B134;
+            break;
+        case (150):
+            b = B150;
+            break;
+        case (200):
+            b = B200;
+            break;
+        case (300):
+            b = B300;
+            break;
+        case (600):
+            b = B600;
+            break;
+        case (1200):
+            b = B1200;
+            break;
+        case (1800):
+            b = B1800;
+            break;
+        case (2400):
+            b = B2400;
+            break;
+        case (4800):
+            b = B4800;
+            break;
+        case (9600):
+            b = B9600;
+            break;
+        case (19200):
+            b = B19200;
+            break;
+        case (38400):
+            b = B38400;
+            break;
+        case (57600):
+            b = B57600;
+            break;
+        case (115200):
+            b = B115200;
+            break;
+        case (230400):
+            b = B230400;
+            break;
+        case (460800):
+            b = B75;
+            break;
+        default:
+            std::cout << "Invalid Baudrate" << std:: endl;
+            return 0;
+    }
+
 
 
     
@@ -85,9 +161,9 @@ int main(const int argc, const char* const* const argv) {
 
      tcgetattr(fd, &SerialPortSettings);        /* Get the current attributesof the Serial port */
 
-     cfsetispeed(&SerialPortSettings,B9600); /* Set Read  Speed as 9600
+     cfsetispeed(&SerialPortSettings,b); /* Set Read  Speed as 9600
                       */
-     cfsetospeed(&SerialPortSettings,B9600); /* Set Write Speed as 9600
+     cfsetospeed(&SerialPortSettings,b); /* Set Write Speed as 9600
                       */
 
      SerialPortSettings.c_cflag &= ~PARENB;   /* Disables the Parity Enable bit(PARENB),So No Parity   */

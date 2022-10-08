@@ -65,6 +65,8 @@ Option:: Beschreibung
 `-d`, `--delay`:: Delay zwischen Paketen
 `-c`, `--comport`:: Comport
 `-f`, `--filename`:: Dateiname
+`-a`, `--baudrate`:: Baudrate
+
 
 
 Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars.
@@ -91,6 +93,8 @@ Option:: Wert
 `-b`, `--bytes`:: 1
 `-d`, `--delay`:: 0
 `-f`, `--filename`:: 9600_1000000_1_0.txt
+`-a`, `--baudrate`:: 9600
+
 
 Resultat: Es gehen keine Bytes verloren.
 
@@ -100,6 +104,8 @@ Option:: Wert
 `-b`, `--bytes`:: 1
 `-d`, `--delay`:: 0
 `-f`, `--filename`:: 9600_1000000_1_0_1.txt
+`-a`, `--baudrate`:: 9600
+
 
 Resultat: Es gehen keine Bytes verloren
 
@@ -109,6 +115,8 @@ Option:: Wert
 `-b`, `--bytes`:: 100
 `-d`, `--delay`:: 0
 `-f`, `--filename`:: 9600_10000_100_0.txt
+`-a`, `--baudrate`:: 9600
+
 
 Resultat: Es gehen keine Bytes verloren
 
@@ -118,6 +126,8 @@ Option:: Wert
 `-b`, `--bytes`:: 100
 `-d`, `--delay`:: 0
 `-f`, `--filename`:: 9600_10000_100_0_1.txt
+`-a`, `--baudrate`:: 9600
+
 
 Resultat: Es gehen keine Bytes verloren
 
@@ -127,6 +137,8 @@ Option:: Wert
 `-b`, `--bytes`:: 1000
 `-d`, `--delay`:: 0
 `-f`, `--filename`:: 9600_1000_1000_0.txt
+`-a`, `--baudrate`:: 9600
+
 
 Resultat: Es gehen keine Bytes verloren
 
@@ -136,6 +148,8 @@ Option:: Wert
 `-b`, `--bytes`:: 1000
 `-d`, `--delay`:: 0
 `-f`, `--filename`:: 9600_1000_1000_0_1.txt
+`-a`, `--baudrate`:: 9600
+
 
 
 
