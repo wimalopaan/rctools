@@ -81,6 +81,32 @@ Das Programm `read` hat keine Delayoption, ansonsten sind die Kommandozeilenopti
 include::{srcbase}/{srcdir}/{extractordir}/read.cc.ReadData[]
 
 
+== Ändern der Baudrate des Funkmoduls
+
+Unter Unix kann man das Tool picocom verwenden um die Baudrate des Funkmoduls zu ändern
+
+
+`picocom -b 38400 /dev/ttyUSB0`
+
+Die Baudrate muss mit der aktuell konfigurierten Baudrate des Funkmoduls übereinstimmen. Anschließend muss man
+`+` `+` `+` 
+eingeben um in den AT Modus zu gelangen.
+
+Die aktuelle Konfiguration erhält man mittels des Befehls:
+
+`ATI5`
+
+Um die Baudrate nun auf beispielsweise 9600 zu ändern, muss man folgenden Befehl eingeben:
+
+`ÀTS1=9`
+
+Anschließend muss man noch die Eingaben persistieren, ansonsten gehen die 
+Änderungen mit einem Reboot verloren.
+
+`AT&W`
+
+Nun kann man mittels `ATO` den AT Modus verlassen und nach einem Reboot sind die Änderungen verfügbar.
+
 == Versuche
 === Versuch 1: Kontinuierliches Senden mit 9600 Baud 
 
@@ -157,4 +183,87 @@ Option:: Wert
 Eine Datenrate von 9600 bit/s kann durch das Modem garantiert werden. Dies überrascht nicht, da die Übertragungsgeschwindigkeit 64000 bit/s beträgt und zudem ein Buffer von 2048 byte vorliegt.
 
 
+=== Versuch 2: Kontinuierliches Senden mit 19200 Baud 
 
+Bei diesem Versuch wird eine variierende Anzahl von Bytes mit 19200 Baud
+versendet, um herauszufinden ab wann Paketverluste auftreten.
+
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_1000_1_0.txt
+`-a`, `--baudrate`:: 19200
+
+
+Resultat: Es gehen keine Bytes verloren.
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 10000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_10000_1_0.txt
+`-a`, `--baudrate`:: 19200
+
+
+Resultat: Es gehen keine Bytes verloren
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 100000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_100000_1_0.txt
+`-a`, `--baudrate`:: 19200
+
+
+Resultat: Es geht eine Folge von Byte 831 bis Byte 876 verloren.
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 100000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_100000_1_0_1.txt
+`-a`, `--baudrate`:: 19200
+
+
+Resultat: Es gehen keine Bytes verloren
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 100000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_100000_1_0_2.txt
+`-a`, `--baudrate`:: 19200
+
+
+Resultat: Es gehen keine Bytes verloren
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_1000000_1_0.txt
+`-a`, `--baudrate`:: 19200
+
+Resultat: 306176-306820: 644 Bytes; 615024-615668 : 644: ; 904336 - 904980:644 Bytes
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_1000000_1_0_1.txt
+`-a`, `--baudrate`:: 19200
+
+Resultat: 281544-282188 : 644 Bytes;576085-576729: 644 Bytes ;872076-872720:644 Bytes
+
+
+==== Versuch 2: Erkenntnis 
+Es kommt bei einer Baudrate von 19200 bereits zum Pufferüberlauf. Dies erkennt man daran, dass immer die gleiche Anzahl Bytes verloren geht. 
