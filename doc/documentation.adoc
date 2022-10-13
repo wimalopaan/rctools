@@ -265,5 +265,19 @@ Option:: Wert
 Resultat: 281544-282188 : 644 Bytes;576085-576729: 644 Bytes ;872076-872720:644 Bytes
 
 
+Bei den letzten Beiden Versuchen liegen folgende Intervalle vor bis es zum Verlust von 644 Bytes kommt:
+
+[306176,306404,288668,281544,293897,295437] in Bytes
+[127,127,120,117,122,123] in Sekunden
+
+[horizontal]
+Option:: Wert
+`-p`, `--packets`:: 1000000
+`-b`, `--bytes`:: 1
+`-d`, `--delay`:: 0
+`-f`, `--filename`:: 19200_1000000_1_0_2.txt (im Labor durchgeführt)
+`-a`, `--baudrate`:: 19200
+
+
 ==== Versuch 2: Erkenntnis 
 Es kommt bei einer Baudrate von 19200 bereits zum Pufferüberlauf. Dies erkennt man daran, dass immer die gleiche Anzahl Bytes verloren geht. 

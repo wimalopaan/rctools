@@ -187,23 +187,31 @@ int main(const int argc, const char* const* const argv) {
 
     //[SendData
     
-    std::unique_ptr<char[]> toWrite = std::make_unique<char[]>(bytes);
-    std::unique_ptr<char[]> written = std::make_unique<char[]>(bytes+1);
+    std::unique_ptr<char[]> toWrite = std::make_unique<char[]>(bytes+1);
+    std::unique_ptr<char[]> written = std::make_unique<char[]>(bytes+2);
+
+
 
     for (int i=0; i< packets; i++){
-        for (int i=0; i<bytes; i++){
+        toWrite.get()[0] = 'P';
+        written.get()[0] = 'P';
+        for (int i=1; i<bytes+1; i++){
             char c = 97 + rand()%26;
             toWrite.get()[i] = c;
             written.get()[i] = c;
         }
-        written.get()[bytes] = '\0';
-        write(fd,toWrite.get(),bytes);
+        written.get()[bytes+1] = '\0';
+        write(fd,toWrite.get(),bytes+1);
         file << written.get() << std::endl;
 
         if (delay > 0){
             std::this_thread::sleep_for(std::chrono::milliseconds(delay));
         }
     }
+
+    char p = 'P';
+    write(fd,&p,1);
+
 
     //]
 
