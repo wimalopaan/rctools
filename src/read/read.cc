@@ -78,20 +78,4 @@ int main(const int argc, const char *const *const argv)
         c='%';
     }
     //]
-
-    /*int c = 0;
-    std::unique_ptr<char[]> toRead = std::make_unique<char[]>(bytes + 1);
-    while (c < packets)
-    {
-        for (int i = 0; i < bytes; i++)
-        {
-            read(fd, &(toRead.get()[i]), 1);
-        }
-        toRead.get()[bytes] = '\0';
-        file << toRead.get() << std::endl;
-        c++;
-    }
-
-    std::cout << "Reading completed" << std::endl;
-    */
 }

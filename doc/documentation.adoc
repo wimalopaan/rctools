@@ -69,7 +69,7 @@ Option:: Beschreibung
 
 
 
-Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars.
+Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars. Die Folge von chars beginnt immer mit einem großen P, sodass der Beginn einer Paketfolge detektiert werden kann. 
 
 :srcdir: write
 include::{srcbase}/{srcdir}/{extractordir}/write.cc.SendData[]
@@ -110,174 +110,29 @@ Nun kann man mittels `ATO` den AT Modus verlassen und nach einem Reboot sind die
 == Versuche
 === Versuch 1: Kontinuierliches Senden mit 9600 Baud 
 
-Bei diesem Versuch wird 1MByte mit einer Baudrate von 9600 bit/s versendet. Die Anzahl Bytes pro Paket und die korrespondierende Anzahl von Paketen wird hierbei variiert. 
+Bei ersten Versuch wird 1MByte mit einer Baudrate von 9600 bit/s versendet. Die Anzahl Bytes pro Paket und die korrespondierende Anzahl von Paketen wird hierbei variiert. 
+
+Fazit: Eine Datenrate von 9600 bit/s kann durch das Modem garantiert werden. Dies überrascht nicht, da die Übertragungsgeschwindigkeit 64000 bit/s beträgt und zudem ein Buffer von 2048 byte vorliegt.
 
 
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 9600_1000000_1_0.txt
-`-a`, `--baudrate`:: 9600
+=== Versuch 2: Kontinuierliches Senden mit mehr als 9600 baud
+
+Bei diesem Versuch wird eine variierende Anzahl von Bytes mit verschiedenen Baudraten, die über 9600 liegen, versendet.
+
+Fazit: Es kommt in wiederkehrenden Abständen zu Verlusten von ganzen Paketfolgen. Je höher die Baudrate ist, desto tritt der Verlust von Paketfolgen auf.
 
 
-Resultat: Es gehen keine Bytes verloren.
+=== Versuch 3: Bufferüberlauf mit Hardware Flow Control detektieren
+Um Bufferüberläufe zu erkennen, wird der CTS Pin des Funkmodems mit einem Logic Analyzer verbunden. 
 
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 9600_1000000_1_0_1.txt
-`-a`, `--baudrate`:: 9600
+Fazit:
+Die Pufferüberläufe werden durch den Analyzer angezeigt. Anhand einer Zeitmessung kann verifiziert werden, dass der Buffer tatsächlich 2048 Byte beträgt. 
 
 
-Resultat: Es gehen keine Bytes verloren
+=== Versuch 4: Mavlink Pakete versenden
+Laut Dokumentation versendet das Modem selbstständig RADIO_STATUS Pakete, um die Auslastung des Puffers mitzuteilen. Dies ist allerdings nur der Fall,
+wenn Mavlink Paket versendet werden. Zunächst muss über den At Command ATS6 das Mavlink Flag auf 1 gesetzt werden. Desweiteren werden die RADIO_STATUS Pakete nur in den Datenstrom inkludiert, wenn Heartbeat Pakete versendet werden. Es gibt zahlreiche Libraries, um Mavlink Pakete zu versenden.
+In diesem Versuch wird die Javascript Library node-mavlink verwendet, um Mavlink Pakete zu versenden und zu empfangen. Das Programm befindet sich im Ordner js.
 
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 10000
-`-b`, `--bytes`:: 100
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 9600_10000_100_0.txt
-`-a`, `--baudrate`:: 9600
+Fazit: In der Tat werden RADIO_STATUS Pakete in den Datenstrom inkludiert, wenn Heartbeat Pakete versendet werden.
 
-
-Resultat: Es gehen keine Bytes verloren
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 10000
-`-b`, `--bytes`:: 100
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 9600_10000_100_0_1.txt
-`-a`, `--baudrate`:: 9600
-
-
-Resultat: Es gehen keine Bytes verloren
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000
-`-b`, `--bytes`:: 1000
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 9600_1000_1000_0.txt
-`-a`, `--baudrate`:: 9600
-
-
-Resultat: Es gehen keine Bytes verloren
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000
-`-b`, `--bytes`:: 1000
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 9600_1000_1000_0_1.txt
-`-a`, `--baudrate`:: 9600
-
-
-
-
-==== Versuch 1: Fazit 
-Eine Datenrate von 9600 bit/s kann durch das Modem garantiert werden. Dies überrascht nicht, da die Übertragungsgeschwindigkeit 64000 bit/s beträgt und zudem ein Buffer von 2048 byte vorliegt.
-
-
-=== Versuch 2: Kontinuierliches Senden mit 19200 Baud 
-
-Bei diesem Versuch wird eine variierende Anzahl von Bytes mit 19200 Baud
-versendet, um herauszufinden ab wann Paketverluste auftreten.
-
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_1000_1_0.txt
-`-a`, `--baudrate`:: 19200
-
-
-Resultat: Es gehen keine Bytes verloren.
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 10000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_10000_1_0.txt
-`-a`, `--baudrate`:: 19200
-
-
-Resultat: Es gehen keine Bytes verloren
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 100000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_100000_1_0.txt
-`-a`, `--baudrate`:: 19200
-
-
-Resultat: Es geht eine Folge von Byte 831 bis Byte 876 verloren.
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 100000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_100000_1_0_1.txt
-`-a`, `--baudrate`:: 19200
-
-
-Resultat: Es gehen keine Bytes verloren
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 100000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_100000_1_0_2.txt
-`-a`, `--baudrate`:: 19200
-
-
-Resultat: Es gehen keine Bytes verloren
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_1000000_1_0.txt
-`-a`, `--baudrate`:: 19200
-
-Resultat: 306176-306820: 644 Bytes; 615024-615668 : 644: ; 904336 - 904980:644 Bytes
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_1000000_1_0_1.txt
-`-a`, `--baudrate`:: 19200
-
-Resultat: 281544-282188 : 644 Bytes;576085-576729: 644 Bytes ;872076-872720:644 Bytes
-
-
-Bei den letzten Beiden Versuchen liegen folgende Intervalle vor bis es zum Verlust von 644 Bytes kommt:
-
-[306176,306404,288668,281544,293897,295437] in Bytes
-[127,127,120,117,122,123] in Sekunden
-
-[horizontal]
-Option:: Wert
-`-p`, `--packets`:: 1000000
-`-b`, `--bytes`:: 1
-`-d`, `--delay`:: 0
-`-f`, `--filename`:: 19200_1000000_1_0_2.txt (im Labor durchgeführt)
-`-a`, `--baudrate`:: 19200
-
-
-==== Versuch 2: Erkenntnis 
-Es kommt bei einer Baudrate von 19200 bereits zum Pufferüberlauf. Dies erkennt man daran, dass immer die gleiche Anzahl Bytes verloren geht. 
