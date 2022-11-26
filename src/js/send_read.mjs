@@ -16,7 +16,7 @@ const REGISTRY = {
 }
 
 
-const msg2= new minimal.Heartbeat
+const msg= new minimal.Heartbeat
 
 const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 115200 })
 
