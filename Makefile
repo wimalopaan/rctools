@@ -46,6 +46,7 @@ web:
 	cp $(WBE)/extractor.html $(WBE)/index.html
 
 sources += doc/documentation.adoc
+sources += doc/documentation[en].adoc
 
 .PHONY: html pdf clean examples
 

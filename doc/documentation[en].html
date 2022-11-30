@@ -500,16 +500,16 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div id="toc" class="toc2">
 <div id="toctitle">Content</div>
 <ul class="sectlevel1">
-<li><a href="#_versuchsbeschreibung">1. Versuchsbeschreibung</a></li>
-<li><a href="#_versuchshardware">2. Versuchshardware</a></li>
-<li><a href="#_testprogramme">3. Testprogramme</a></li>
-<li><a href="#_ändern_der_baudrate_des_funkmoduls">4. Ändern der Baudrate des Funkmoduls</a></li>
-<li><a href="#_versuche">5. Versuche</a>
+<li><a href="#_test_description">1. Test Description</a></li>
+<li><a href="#_test_execution">2. Test Execution</a></li>
+<li><a href="#_test_programs">3. Test programs</a></li>
+<li><a href="#_changing_the_baudrate_of_the_module">4. Changing the baudrate of the module</a></li>
+<li><a href="#_tests">5. Tests</a>
 <ul class="sectlevel2">
-<li><a href="#_versuch_1_kontinuierliches_senden_mit_9600_baud">5.1. Versuch 1: Kontinuierliches Senden mit 9600 Baud</a></li>
-<li><a href="#_versuch_2_kontinuierliches_senden_mit_mehr_als_9600_baud">5.2. Versuch 2: Kontinuierliches Senden mit mehr als 9600 baud</a></li>
-<li><a href="#_versuch_3_bufferüberlauf_mit_hardware_flow_control_detektieren">5.3. Versuch 3: Bufferüberlauf mit Hardware Flow Control detektieren</a></li>
-<li><a href="#_versuch_4_mavlink_pakete_versenden">5.4. Versuch 4: Mavlink Pakete versenden</a></li>
+<li><a href="#_test_1_sending_continously_with_9600_baud">5.1. Test 1: Sending continously with 9600 Baud</a></li>
+<li><a href="#_test_2_sending_continously_with_more_than_9600_baud">5.2. Test 2: Sending continously with more than 9600 Baud</a></li>
+<li><a href="#_test_3_detect_buffer_overflow_with_hardware_flow_control">5.3. Test 3: Detect buffer overflow with Hardware Flow Control</a></li>
+<li><a href="#_test_4_sending_mavlink_packages">5.4. Test 4: Sending Mavlink packages</a></li>
 </ul>
 </li>
 </ul>
@@ -517,26 +517,26 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_versuchsbeschreibung"><a class="anchor" href="#_versuchsbeschreibung"></a><a class="link" href="#_versuchsbeschreibung">1. Versuchsbeschreibung</a></h2>
+<h2 id="_test_description"><a class="anchor" href="#_test_description"></a><a class="link" href="#_test_description">1. Test Description</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Das Funkmodul Sik Telemetry V3 der Firma Holybro soll laut Datenblatt Entfernungen von über 300 Metern ermöglichen und das Senden von Paketen mit einer konstanten Datenrate garantieren. Es beinhaltet einen Buffer von 2048 kbyte, zudem ist die Sendegeschwindigkeit parametrierbar (Standard: 64kbit/s). In dieser Versuchsreihe soll die Baudrate gefunden werden mit der eine konstante Datenrate garantiert werden kann, ohne hierbei Paketverluste zu erleiden. Hierzu soll letzendlich herausgefunden werden, wann der interne Buffer des Funkmoduls überläuft.</p>
+<p>The module Sik Telemetry V3 of the company Holybro guarantees distances from more than 300 meters out of the box with a constant data rate. It contains a Buffer of 2048 kbyte and the air speed is parameterizable (64kbit/s is standard). The goal of this test series is to find the baudrate which guarantees a constant data rate without package loss. Therefore the overflow time of the internal buffer is determined.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_versuchshardware"><a class="anchor" href="#_versuchshardware"></a><a class="link" href="#_versuchshardware">2. Versuchshardware</a></h2>
+<h2 id="_test_execution"><a class="anchor" href="#_test_execution"></a><a class="link" href="#_test_execution">2. Test Execution</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Zur Versuchsdurchführung werden zwei der Funkmodems vewendet. Eines ist mit dem Computer über die serielle Schnittstelle verbunden. Beim zweiten Funkmodul wurden RX und TX Pin miteinander verbunden, sodass empfangene Pakete umgehend zurückgesendet werden.</p>
+<p>In order to execute the tests two modules are used. One of them is connected with the computer via serial port. On the second modem Tx and Rx are directly connected in order to immidiately send back received packets.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_testprogramme"><a class="anchor" href="#_testprogramme"></a><a class="link" href="#_testprogramme">3. Testprogramme</a></h2>
+<h2 id="_test_programs"><a class="anchor" href="#_test_programs"></a><a class="link" href="#_test_programs">3. Test programs</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Das Testen des Funkmoduls geschieht mit Hilfe von 2 Programmen. Das Programm <code>write</code> verschickt eine Anzahl von Paketen mit einer Anzahl von Bytes. Zudem ist ein Delay zwischen den Paketen parametrierbar. Das Programm <code>write</code> hat die folgenden Kommandozeilenoptionen:</p>
+<p>The tests are executed with the help of two programs. The program <code>write</code> sends a number of packets with a number of bytes. Furthermore the delay between packets is parameterizable. The program <code>write</code> has the following command line options:</p>
 </div>
 <div class="hdlist">
 <table>
@@ -545,7 +545,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 Option
 </td>
 <td class="hdlist2">
-<p>Beschreibung</p>
+<p>Description</p>
 </td>
 </tr>
 <tr>
@@ -553,7 +553,7 @@ Option
 <code>-h</code>, <code>--help</code>
 </td>
 <td class="hdlist2">
-<p>Hilfe</p>
+<p>Help</p>
 </td>
 </tr>
 <tr>
@@ -561,7 +561,7 @@ Option
 <code>-p</code>, <code>--packets</code>
 </td>
 <td class="hdlist2">
-<p>Anzahl Pakete</p>
+<p>Number of packets</p>
 </td>
 </tr>
 <tr>
@@ -569,7 +569,7 @@ Option
 <code>-b</code>, <code>--bytes</code>
 </td>
 <td class="hdlist2">
-<p>Anzahl Bytes</p>
+<p>Number of bytes</p>
 </td>
 </tr>
 <tr>
@@ -577,7 +577,7 @@ Option
 <code>-d</code>, <code>--delay</code>
 </td>
 <td class="hdlist2">
-<p>Delay zwischen Paketen</p>
+<p>Delay between packets</p>
 </td>
 </tr>
 <tr>
@@ -593,7 +593,7 @@ Option
 <code>-f</code>, <code>--filename</code>
 </td>
 <td class="hdlist2">
-<p>Dateiname</p>
+<p>Filename</p>
 </td>
 </tr>
 <tr>
@@ -607,7 +607,7 @@ Option
 </table>
 </div>
 <div class="paragraph">
-<p>Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars. Die Folge von chars beginnt immer mit einem großen P, sodass der Beginn eines Pakets detektiert werden kann.</p>
+<p>In the source code Bytes are realized through single chars so a packet is a random sequence of chars. Every sequence starts with a capital P in order to detect the begin of a packet.</p>
 </div>
 <div class="listingblock">
 <div class="title">Zeilen aus der Datei <a href="../src/write/write.cc.html" target="newwindows"><code>write.cc</code></a> [Snippet: SendData] </div>
@@ -634,7 +634,7 @@ Option
 </div>
 </div>
 <div class="paragraph">
-<p>Das Programm <code>read</code> hat keine Delayoption, ansonsten sind die Kommandozeilenoptionen analog zum Programm <code>write</code>. Die empfangenen Bytes werden ausgelesen und ebenfalls in eine Datei geschrieben.</p>
+<p>The program <code>read</code> has no delay option. The other options are the same as program <code>write</code> offers. The received bytes are written into a file.</p>
 </div>
 <div class="listingblock">
 <div class="title">Zeilen aus der Datei <a href="../src/read/read.cc.html" target="newwindows"><code>read.cc</code></a> [Snippet: ReadData] </div>
@@ -664,86 +664,81 @@ Option
 </div>
 </div>
 <div class="sect1">
-<h2 id="_ändern_der_baudrate_des_funkmoduls"><a class="anchor" href="#_ändern_der_baudrate_des_funkmoduls"></a><a class="link" href="#_ändern_der_baudrate_des_funkmoduls">4. Ändern der Baudrate des Funkmoduls</a></h2>
+<h2 id="_changing_the_baudrate_of_the_module"><a class="anchor" href="#_changing_the_baudrate_of_the_module"></a><a class="link" href="#_changing_the_baudrate_of_the_module">4. Changing the baudrate of the module</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Unter Unix kann man das Tool picocom verwenden um die Baudrate des Funkmoduls zu ändern</p>
+<p>With Unix one can use the tool picocom in order to change the baudrate of the module.</p>
 </div>
 <div class="paragraph">
 <p><code>picocom -b 38400 /dev/ttyUSB0</code></p>
 </div>
 <div class="paragraph">
-<p>Die Baudrate muss mit der aktuell konfigurierten Baudrate des Funkmoduls übereinstimmen. Anschließend muss man
-<code>+</code> <code>+</code> <code>+</code>
-eingeben um in den AT Modus zu gelangen.</p>
+<p>The baudrate has to match with the currently configured baudrate of the module. After that one need to enter <code>+</code> <code>+</code> <code>+</code> to enter AT Mode.</p>
 </div>
 <div class="paragraph">
-<p>Die aktuelle Konfiguration erhält man mittels des Befehls:</p>
+<p>The current configuration can be received with the command:</p>
 </div>
 <div class="paragraph">
 <p><code>ATI5</code></p>
 </div>
 <div class="paragraph">
-<p>Um die Baudrate nun auf beispielsweise 9600 zu ändern, muss man folgenden Befehl eingeben:</p>
+<p>To change the baudrate to 9600 one have to enter:</p>
 </div>
 <div class="paragraph">
 <p><code>ÀTS1=9</code></p>
 </div>
 <div class="paragraph">
-<p>Anschließend muss man noch die Eingaben persistieren, ansonsten gehen die
-Änderungen mit einem Reboot verloren.</p>
+<p>After that one need to persist the changes. Otherwise the changes are lost after a reboot.</p>
 </div>
 <div class="paragraph">
 <p><code>AT&amp;W</code></p>
 </div>
 <div class="paragraph">
-<p>Nun kann man mittels <code>ATO</code> den AT Modus verlassen und nach einem Reboot sind die Änderungen verfügbar.</p>
+<p>Now one can leaf AT Mode with the command <code>ATO</code> and the changes are present after a reboot.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_versuche"><a class="anchor" href="#_versuche"></a><a class="link" href="#_versuche">5. Versuche</a></h2>
+<h2 id="_tests"><a class="anchor" href="#_tests"></a><a class="link" href="#_tests">5. Tests</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_versuch_1_kontinuierliches_senden_mit_9600_baud"><a class="anchor" href="#_versuch_1_kontinuierliches_senden_mit_9600_baud"></a><a class="link" href="#_versuch_1_kontinuierliches_senden_mit_9600_baud">5.1. Versuch 1: Kontinuierliches Senden mit 9600 Baud</a></h3>
+<h3 id="_test_1_sending_continously_with_9600_baud"><a class="anchor" href="#_test_1_sending_continously_with_9600_baud"></a><a class="link" href="#_test_1_sending_continously_with_9600_baud">5.1. Test 1: Sending continously with 9600 Baud</a></h3>
 <div class="paragraph">
-<p>Bei ersten Versuch wird 1MByte mit einer Baudrate von 9600 bit/s versendet. Die Anzahl Bytes pro Paket und die Anzahl von versendeten Paketen wird hierbei variiert.</p>
+<p>In the first test 1 MByte is sent with a Baudrate of 9600 bis/s. The number of packets and the number of bytes are varied.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Fazit: Eine Datenrate von 9600 bit/s kann durch das Modem garantiert werden. Dies überrascht nicht, da die Übertragungsgeschwindigkeit 64000 bit/s beträgt und zudem ein Buffer von 2048 byte vorliegt.</pre>
+<pre>Result: The modem can guarantee a datarate of 9600 bit/s. This is not suprising because air speed is 64000 bit/s and the internal buffer is 2048 byte.</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_versuch_2_kontinuierliches_senden_mit_mehr_als_9600_baud"><a class="anchor" href="#_versuch_2_kontinuierliches_senden_mit_mehr_als_9600_baud"></a><a class="link" href="#_versuch_2_kontinuierliches_senden_mit_mehr_als_9600_baud">5.2. Versuch 2: Kontinuierliches Senden mit mehr als 9600 baud</a></h3>
+<h3 id="_test_2_sending_continously_with_more_than_9600_baud"><a class="anchor" href="#_test_2_sending_continously_with_more_than_9600_baud"></a><a class="link" href="#_test_2_sending_continously_with_more_than_9600_baud">5.2. Test 2: Sending continously with more than 9600 Baud</a></h3>
 <div class="paragraph">
-<p>Bei diesem Versuch wird eine variierende Anzahl von Bytes mit verschiedenen Baudraten, die über 9600 liegen, versendet.</p>
+<p>In this test a varying number of bytes is sent with different baudrates greater than 9600.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Fazit: Es kommt in wiederkehrenden Abständen zu Verlusten von ganzen Paketfolgen. Je höher die Baudrate ist, desto häufiger tritt der Verlust von Paketfolgen auf.</pre>
+<pre>Result: In recurring intervals packet sequences are lost. The greater the baudrate the more often packet sequnces get lost.</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_versuch_3_bufferüberlauf_mit_hardware_flow_control_detektieren"><a class="anchor" href="#_versuch_3_bufferüberlauf_mit_hardware_flow_control_detektieren"></a><a class="link" href="#_versuch_3_bufferüberlauf_mit_hardware_flow_control_detektieren">5.3. Versuch 3: Bufferüberlauf mit Hardware Flow Control detektieren</a></h3>
+<h3 id="_test_3_detect_buffer_overflow_with_hardware_flow_control"><a class="anchor" href="#_test_3_detect_buffer_overflow_with_hardware_flow_control"></a><a class="link" href="#_test_3_detect_buffer_overflow_with_hardware_flow_control">5.3. Test 3: Detect buffer overflow with Hardware Flow Control</a></h3>
 <div class="paragraph">
-<p>Um Bufferüberläufe zu erkennen, wird der CTS Pin des Funkmodems mit einem Logic Analyzer verbunden.</p>
+<p>To detect buffer overflows the CTS Pin is conneted with a logic analyzer.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Fazit:
-Die Pufferüberläufe werden durch den Analyzer angezeigt. Anhand einer Zeitmessung kann verifiziert werden, dass der Buffer tatsächlich 2048 Byte beträgt.</pre>
+<pre>Result:
+The buffer overflows are shown through the analyzer. With a time measurement one can verify the buffer size of 2048 Byte.</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_versuch_4_mavlink_pakete_versenden"><a class="anchor" href="#_versuch_4_mavlink_pakete_versenden"></a><a class="link" href="#_versuch_4_mavlink_pakete_versenden">5.4. Versuch 4: Mavlink Pakete versenden</a></h3>
+<h3 id="_test_4_sending_mavlink_packages"><a class="anchor" href="#_test_4_sending_mavlink_packages"></a><a class="link" href="#_test_4_sending_mavlink_packages">5.4. Test 4: Sending Mavlink packages</a></h3>
 <div class="paragraph">
-<p>Laut Dokumentation versendet das Modem selbstständig <code>RADIO_STATUS</code> Pakete, um die Auslastung des Puffers mitzuteilen. Dies ist allerdings nur der Fall,
-wenn Mavlink Paket versendet werden. Zunächst muss über den At Command <code>ATS6</code> das Mavlink Flag auf 1 gesetzt werden. Desweiteren werden die <code>RADIO_STATUS</code> Pakete nur in den Datenstrom inkludiert, wenn <code>HEARTBEAT</code> Pakete versendet werden. Es gibt zahlreiche Libraries, um Mavlink Pakete zu versenden.
-In diesem Versuch wird die Javascript Library <code>node-mavlink</code> verwendet, um Mavlink Pakete zu versenden und zu empfangen. Die Library kann mittels</p>
+<p>It&#8217;s documented that the modem is sending <code>RADIO_STATUS</code> packets by itself to tell the buffer capacity. This only happens when sending Mavlink Packets. With the AT Command <code>ATS6</code> the Mavlink Flag can be set to one. <code>RADIO_STATUS</code> packets are only included into the data stream when <code>HEARTBEAT</code> packets are sent. There is a number of libraries to send Mavlink Packets. In this test the Javascipt library <code>node-mavlink</code> is used in order to send and receive Mavlink packets. The library can be installed via</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -751,7 +746,7 @@ In diesem Versuch wird die Javascript Library <code>node-mavlink</code> verwende
 </div>
 </div>
 <div class="paragraph">
-<p>installiert werden. Anschließend kann man in diesem Ordner Javascript (.mjs) Programme erstellen und diese mittels</p>
+<p>After that one can create Javascript (.mjs) programs in that folder and execute them via</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -759,11 +754,11 @@ In diesem Versuch wird die Javascript Library <code>node-mavlink</code> verwende
 </div>
 </div>
 <div class="paragraph">
-<p>ausführen. Das Programm send_read.mjs befindet sich im Ordner js und bietet die Möglichkeit Mavlink Pakete seriell zu versenden. Auch das Empfangen von Paketen ist mit dem Programm möglich, denn der Inhalt von empfangenen Mavlink Paketen wird anhand der Header Informationen geparsed.</p>
+<p>The program send_read.mjs in contained in folder js and makes it possible to send Mavlink packages through serial port. Receiving packets is also possible and the content of received Mavlink packets gets parsed with the help of the header information.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Fazit: In der Tat werden RADIO_STATUS Pakete in den Datenstrom inkludiert, wenn HEARTBEAT Pakete versendet werden.</pre>
+<pre>Result: RADIO_STATUS packets get included into the data stream when sending HEARTBEAT packets.</pre>
 </div>
 </div>
 </div>
@@ -772,7 +767,7 @@ In diesem Versuch wird die Javascript Library <code>node-mavlink</code> verwende
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-11-30 20:25:15 +0100
+Last updated 2022-11-30 20:25:24 +0100
 </div>
 </div>
 <script type="text/x-mathjax-config">

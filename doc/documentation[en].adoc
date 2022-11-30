@@ -1,0 +1,160 @@
+
+= Holybro Telemetry V3 Test
+Johannes Hanuja <joha1003@stud.hs-kl.de>
+:lang: de
+:toc: left
+:toc-title: Content
+:toclevels: 5
+:numbered:
+:sectnumlevels: 5
+:src_numbered: 
+:icons: font
+:figure-caption: Figure
+:keywords: asciidoctor
+:description: Holybro Telemetry V3 Test
+:title: Holybro Telemetry V3 Test
+:sectanchors:
+:sectlinks:
+:experimental:
+:copyright: Wilhelm Meier
+:duration: 90
+:coderay-css: style
+:source-highlighter: pygments
+:pygments-css: class
+:status:
+:menu:
+:navigation:
+:split:
+:goto:
+:blank:
+:deckjs_theme: swiss
+:showtitle:
+:docinfo1:
+:stem:
+:deckjs_transition: horizontal-slide
+//:stylesdir: ./css
+//:stylesheet: wm2.css
+//:scriptsdir: ./js
+:customcss: css/deckjs.css 
+:revealjs_theme: beige
+:revealjs_slidenumber: true
+// for attributes in link:[] macro like link:xxx[window="_blank"]
+:linkattrs:
+
+:srcbase: ../src
+:extractordir: .extractor
+
+
+== Test Description
+
+The module Sik Telemetry V3 of the company Holybro guarantees distances from more than 300 meters out of the box with a constant data rate. It contains a Buffer of 2048 kbyte and the air speed is parameterizable (64kbit/s is standard). The goal of this test series is to find the baudrate which guarantees a constant data rate without package loss. Therefore the overflow time of the internal buffer is determined. 
+
+
+
+== Test Execution
+
+In order to execute the tests two modules are used. One of them is connected with the computer via serial port. On the second modem Tx and Rx are directly connected in order to immidiately send back received packets. 
+
+== Test programs
+
+The tests are executed with the help of two programs. The program `write` sends a number of packets with a number of bytes. Furthermore the delay between packets is parameterizable. The program `write` has the following command line options:
+
+
+[horizontal]
+Option:: Description
+`-h`, `--help`:: Help
+`-p`, `--packets`:: Number of packets
+`-b`, `--bytes`:: Number of bytes
+`-d`, `--delay`:: Delay between packets
+`-c`, `--comport`:: Comport
+`-f`, `--filename`:: Filename
+`-a`, `--baudrate`:: Baudrate
+
+
+
+In the source code Bytes are realized through single chars so a packet is a random sequence of chars. Every sequence starts with a capital P in order to detect the begin of a packet.
+
+
+:srcdir: write
+include::{srcbase}/{srcdir}/{extractordir}/write.cc.SendData[]
+
+
+The program `read` has no delay option. The other options are the same as program `write` offers. The received bytes are written into a file.
+
+
+:srcdir: read
+include::{srcbase}/{srcdir}/{extractordir}/read.cc.ReadData[]
+
+
+== Changing the baudrate of the module
+
+With Unix one can use the tool picocom in order to change the baudrate of the module.
+
+
+`picocom -b 38400 /dev/ttyUSB0`
+
+The baudrate has to match with the currently configured baudrate of the module. After that one need to enter `+` `+` `+` to enter AT Mode.
+
+
+The current configuration can be received with the command:
+
+`ATI5`
+
+To change the baudrate to 9600 one have to enter:
+
+`ÀTS1=9`
+
+After that one need to persist the changes. Otherwise the changes are lost after a reboot.
+
+`AT&W`
+
+Now one can leaf AT Mode with the command `ATO` and the changes are present after a reboot. 
+
+== Tests
+=== Test 1: Sending continously with 9600 Baud
+
+In the first test 1 MByte is sent with a Baudrate of 9600 bis/s. The number of packets and the number of bytes are varied.
+
+----
+Result: The modem can guarantee a datarate of 9600 bit/s. This is not suprising because air speed is 64000 bit/s and the internal buffer is 2048 byte.
+----
+
+=== Test 2: Sending continously with more than 9600 Baud
+
+In this test a varying number of bytes is sent with different baudrates greater than 9600.
+
+
+----
+Result: In recurring intervals packet sequences are lost. The greater the baudrate the more often packet sequnces get lost.
+----
+
+=== Test 3: Detect buffer overflow with Hardware Flow Control
+
+To detect buffer overflows the CTS Pin is conneted with a logic analyzer.
+
+
+----
+Result:
+The buffer overflows are shown through the analyzer. With a time measurement one can verify the buffer size of 2048 Byte.
+----
+
+=== Test 4: Sending Mavlink packages
+
+It's documented that the modem is sending `RADIO_STATUS` packets by itself to tell the buffer capacity. This only happens when sending Mavlink Packets. With the AT Command `ATS6` the Mavlink Flag can be set to one. `RADIO_STATUS` packets are only included into the data stream when `HEARTBEAT` packets are sent. There is a number of libraries to send Mavlink Packets. In this test the Javascipt library `node-mavlink` is used in order to send and receive Mavlink packets. The library can be installed via
+
+----
+npm install --save node-mavlink serialport
+----
+
+After that one can create Javascript (.mjs) programs in that folder and execute them via 
+
+----
+node filename
+----
+
+The program send_read.mjs in contained in folder js and makes it possible to send Mavlink packages through serial port. Receiving packets is also possible and the content of received Mavlink packets gets parsed with the help of the header information. 
+
+
+----
+Result: RADIO_STATUS packets get included into the data stream when sending HEARTBEAT packets. 
+----

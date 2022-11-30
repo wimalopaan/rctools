@@ -47,7 +47,7 @@ Johannes Hanuja <joha1003@stud.hs-kl.de>
 
 == Versuchsbeschreibung
 
-Das Funkmodul Sik Telemetry V3 der Firma Holybro soll laut Datenblatt Entfernungen von über 300 Metern schaffen und das Senden von Paketen mit einer konstanten Datenrate garantieren. Es beinhaltet einen Buffer von 2048 kbyte, zudem ist die Sendegeschwindigkeit parametrierbar (Standart: 64kbit/s). In dieser Versuchsreihe soll die Baudrate gefunden werden mit der eine konstante Datenrate garantiert werden kann, ohne hierbei Paketverluste zu erleiden. Hierzu soll letzendlich herausgefunden werden, wann der interne Buffer des Funkmoduls überläuft. Desweiteren soll das Verhalten des Funkmoduls über größere Entfernungen überprüft werden. 
+Das Funkmodul Sik Telemetry V3 der Firma Holybro soll laut Datenblatt Entfernungen von über 300 Metern ermöglichen und das Senden von Paketen mit einer konstanten Datenrate garantieren. Es beinhaltet einen Buffer von 2048 kbyte, zudem ist die Sendegeschwindigkeit parametrierbar (Standard: 64kbit/s). In dieser Versuchsreihe soll die Baudrate gefunden werden mit der eine konstante Datenrate garantiert werden kann, ohne hierbei Paketverluste zu erleiden. Hierzu soll letzendlich herausgefunden werden, wann der interne Buffer des Funkmoduls überläuft. 
 
 == Versuchshardware
 
@@ -55,7 +55,7 @@ Zur Versuchsdurchführung werden zwei der Funkmodems vewendet. Eines ist mit dem
 
 == Testprogramme
 
-Das Testen des Funkmoduls geschieht mit Hilfe von 2 Programmen. Das Programm write verschickt eine Anzahl von Paketen mit einer Anzahl von Bytes. Zudem ist ein Delay zwischen den Paketen parametrierbar. Das Programm `write` hat die folgenden Kommandozeilenoptionen:  
+Das Testen des Funkmoduls geschieht mit Hilfe von 2 Programmen. Das Programm `write` verschickt eine Anzahl von Paketen mit einer Anzahl von Bytes. Zudem ist ein Delay zwischen den Paketen parametrierbar. Das Programm `write` hat die folgenden Kommandozeilenoptionen:  
 
 [horizontal]
 Option:: Beschreibung
@@ -69,7 +69,7 @@ Option:: Beschreibung
 
 
 
-Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars. Die Folge von chars beginnt immer mit einem großen P, sodass der Beginn einer Paketfolge detektiert werden kann. 
+Im Sourcecode werden die Bytes durch einzelne Chars realisiert und ein Paket ist eine zufällige Folge von Chars. Die Folge von chars beginnt immer mit einem großen P, sodass der Beginn eines Pakets detektiert werden kann. 
 
 :srcdir: write
 include::{srcbase}/{srcdir}/{extractordir}/write.cc.SendData[]
@@ -110,7 +110,7 @@ Nun kann man mittels `ATO` den AT Modus verlassen und nach einem Reboot sind die
 == Versuche
 === Versuch 1: Kontinuierliches Senden mit 9600 Baud 
 
-Bei ersten Versuch wird 1MByte mit einer Baudrate von 9600 bit/s versendet. Die Anzahl Bytes pro Paket und die korrespondierende Anzahl von Paketen wird hierbei variiert. 
+Bei ersten Versuch wird 1MByte mit einer Baudrate von 9600 bit/s versendet. Die Anzahl Bytes pro Paket und die Anzahl von versendeten Paketen wird hierbei variiert. 
 
 ----
 Fazit: Eine Datenrate von 9600 bit/s kann durch das Modem garantiert werden. Dies überrascht nicht, da die Übertragungsgeschwindigkeit 64000 bit/s beträgt und zudem ein Buffer von 2048 byte vorliegt.
@@ -134,9 +134,9 @@ Die Pufferüberläufe werden durch den Analyzer angezeigt. Anhand einer Zeitmess
 ----
 
 === Versuch 4: Mavlink Pakete versenden
-Laut Dokumentation versendet das Modem selbstständig RADIO_STATUS Pakete, um die Auslastung des Puffers mitzuteilen. Dies ist allerdings nur der Fall,
-wenn Mavlink Paket versendet werden. Zunächst muss über den At Command ATS6 das Mavlink Flag auf 1 gesetzt werden. Desweiteren werden die RADIO_STATUS Pakete nur in den Datenstrom inkludiert, wenn Heartbeat Pakete versendet werden. Es gibt zahlreiche Libraries, um Mavlink Pakete zu versenden.
-In diesem Versuch wird die Javascript Library node-mavlink verwendet, um Mavlink Pakete zu versenden und zu empfangen. Die Library kann mittels   
+Laut Dokumentation versendet das Modem selbstständig `RADIO_STATUS` Pakete, um die Auslastung des Puffers mitzuteilen. Dies ist allerdings nur der Fall,
+wenn Mavlink Paket versendet werden. Zunächst muss über den At Command `ATS6` das Mavlink Flag auf 1 gesetzt werden. Desweiteren werden die `RADIO_STATUS` Pakete nur in den Datenstrom inkludiert, wenn `HEARTBEAT` Pakete versendet werden. Es gibt zahlreiche Libraries, um Mavlink Pakete zu versenden.
+In diesem Versuch wird die Javascript Library `node-mavlink` verwendet, um Mavlink Pakete zu versenden und zu empfangen. Die Library kann mittels   
 
 ----
 npm install --save node-mavlink serialport
@@ -148,8 +148,8 @@ installiert werden. Anschließend kann man in diesem Ordner Javascript (.mjs) Pr
 node filename
 ----
 
-ausführen. Das Programm send_read.mjs befindet sich im Ordner js und bietet die Möglichkeit Mavlink Pakete seriell zu versenden. Auch das Empfangen von Paketen ist mit dem Programm möglich, denn der Inhalt von empfangenen Mavlink wird anhand der Header Informationen geparsed.
+ausführen. Das Programm send_read.mjs befindet sich im Ordner js und bietet die Möglichkeit Mavlink Pakete seriell zu versenden. Auch das Empfangen von Paketen ist mit dem Programm möglich, denn der Inhalt von empfangenen Mavlink Paketen wird anhand der Header Informationen geparsed.
 
 ----
-Fazit: In der Tat werden RADIO_STATUS Pakete in den Datenstrom inkludiert, wenn Heartbeat Pakete versendet werden.
+Fazit: In der Tat werden RADIO_STATUS Pakete in den Datenstrom inkludiert, wenn HEARTBEAT Pakete versendet werden.
 ----
